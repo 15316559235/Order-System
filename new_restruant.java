@@ -9,6 +9,7 @@ public class new_restruant extends JFrame {
 	private JLabel jl1,jl2,jl3,jl4;
 	private JButton jb1,jb2;
 	private JTextField jt1,jt2,jt3,jt4;
+	public static String name,location,boss,tel;
 	
 	public new_restruant(){
 		jp1=new JPanel();
@@ -53,7 +54,7 @@ public class new_restruant extends JFrame {
 		setResizable(false);
 		setDefaultCloseOperation(3);
 		initLister();
-	}
+		}
 	
 	private boolean isnumber(){
 		for (int i = 0; i < jt4.getText().length(); i++){
@@ -67,8 +68,15 @@ public class new_restruant extends JFrame {
 	private void initLister() {
 		jb1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(isnumber())
+				if(isnumber()){
+					name=jt1.getText();
+					location=jt2.getText();
+					boss=jt3.getText();
+					tel=jt4.getText();
 					JOptionPane.showConfirmDialog(null,"添加成功","提示",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+					new restruant_manage();
+				}
 				else
 					JOptionPane.showConfirmDialog(null,"联系电话只能为数字", "提示",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
 			}

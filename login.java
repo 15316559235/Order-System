@@ -58,8 +58,11 @@ public class login extends JFrame {
 		jb1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String password="123";
-				if(jt.getText().endsWith("123")&&String.valueOf(jps.getPassword()).equals(password))
+				if(jt.getText().endsWith("123")&&String.valueOf(jps.getPassword()).equals(password)){
 					JOptionPane.showConfirmDialog(null,"登陆成功","提示",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+					new add_restruant();
+				}
 				else
 					JOptionPane.showConfirmDialog(null,"密码错误", "提示",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
 			}
