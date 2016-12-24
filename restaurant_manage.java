@@ -1,13 +1,13 @@
-package GUI;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.sql.*;
 
-public class restruant_manage{
+public class restaurant_manage{
     private JLabel label[]=new JLabel[100];
     private JFileChooser chooser[]=new JFileChooser[100];
-    private JButton food_jb[]=new JButton[100];
-    private JLabel restruant_name,restruant_location,restruant_boss,restruant_tel,food_manage;
+    private JButton food_jb[]=new JButton[100],shop_jb[]=new JButton[100];
+    private JLabel restaurant_name,restaurant_location,restaurant_boss,restaurant_tel,food_manage;
     private JPanel jp1,jp2,jp3,jp4,jp5;
     private JPanel food_jp[]=new JPanel[100];
     private JLabel jl1,jl2,jl3,jl4;
@@ -20,13 +20,29 @@ public class restruant_manage{
     private JLabel add_icon[]=new JLabel[100],add_price[]=new JLabel[100],add_name[]=new JLabel[100];
     private ImageIcon icon[]=new ImageIcon[100];
     private JPanel add_jp[]=new JPanel[100];
+    private JPanel jp=new JPanel();
+    private JScrollPane js=new JScrollPane(jp);
+    private String name,location,boss,tel;
+    private String iconurl[]=new String[100];
 	int number=0;
     
     public void info(){
-    	restruant_name=new JLabel(new_restruant.name);
-    	restruant_location=new JLabel(new_restruant.location);
-    	restruant_boss=new JLabel(new_restruant.boss);
-    	restruant_tel=new JLabel(new_restruant.tel);
+    	try{
+    		Database.strTemp="SELECT * FROM restaurantinfo WHERE Username= '"+login.Username+"'";
+			Database.rs=Database.stmt.executeQuery(Database.strTemp);
+			while(Database.rs.next()){
+				name=Database.rs.getString("RestaurantName");
+				location=Database.rs.getString("RestaurantAddress");
+				boss=Database.rs.getString("RestaurantBoss");
+				tel=Database.rs.getString("RestaurantTel");
+			}
+		}catch(SQLException e1){
+			e1.printStackTrace();
+		}
+    	restaurant_name=new JLabel(name);
+    	restaurant_location=new JLabel(location);
+    	restaurant_boss=new JLabel(boss);
+    	restaurant_tel=new JLabel(tel);
     	food_manage=new JLabel("管理菜单");
     	jl1=new JLabel("店名");
     	jl2=new JLabel("地址");
@@ -38,35 +54,32 @@ public class restruant_manage{
     	jp4=new JPanel();
     	jp5=new JPanel();
     	jp1.add(jl1,BorderLayout.WEST);
-    	jp1.add(restruant_name,BorderLayout.CENTER);
+    	jp1.add(restaurant_name,BorderLayout.CENTER);
     	jp2.add(jl2,BorderLayout.WEST);
-    	jp2.add(restruant_location,BorderLayout.CENTER);
+    	jp2.add(restaurant_location,BorderLayout.CENTER);
     	jp3.add(jl3,BorderLayout.WEST);
-    	jp3.add(restruant_boss,BorderLayout.CENTER);
+    	jp3.add(restaurant_boss,BorderLayout.CENTER);
     	jp4.add(jl4,BorderLayout.WEST);
-    	jp4.add(restruant_tel,BorderLayout.CENTER);
+    	jp4.add(restaurant_tel,BorderLayout.CENTER);
     	jp5.add(food_manage);
-    	jf.add(jp1);
-    	jf.add(jp2);
-    	jf.add(jp3);
-    	jf.add(jp4);
-    	jf.add(jp5);
-		jf.setLayout(new GridLayout(0,1));
-		jf.setSize(400,500);
-    	
+    	jp.add(jp1);
+    	jp.add(jp2);
+    	jp.add(jp3);
+    	jp.add(jp4);
+    	jp.add(jp5);
+		jp.setLayout(new GridLayout(0,1));
+		jp.setSize(400,500);
     }
     
     public void chooseimage(int i){
     	chooser[i]=new JFileChooser();
         food_jb[i] = new JButton("添加菜品");
+        shop_jb[i] = new JButton("订单管理");
         food_jp[i]=new JPanel();
         food_jp[i].add(food_jb[i]);
+        food_jp[i].add(shop_jb[i]);
 		food_jp[i].setLayout(new FlowLayout());
-		jf.add(food_jp[i]);
-		jf.setVisible(true);
-		jf.setLocation(800,400);
-		jf.setResizable(false);
-		jf.setDefaultCloseOperation(3);
+		jp.add(food_jp[i]);
 	}
     
     public void food(int i){
@@ -105,6 +118,37 @@ public class restruant_manage{
 		food_jf[i].pack();
     }
     
+    private void data(){
+    	try{
+    		Database.strTemp="SELECT * FROM "+name+"";
+			Database.rs=Database.stmt.executeQuery(Database.strTemp);
+			String name1,price1,iconurl1;
+			while(Database.rs.next()){
+				name1=Database.rs.getString("FoodName");
+				price1=Database.rs.getString("FoodPrice");
+				iconurl1=Database.rs.getString("FoodIcon");
+				icon[number]=new ImageIcon(iconurl1); 
+				add_jp[number]=new JPanel();
+				add_icon[number]=new JLabel();
+				add_name[number]=new JLabel(name1);
+				add_price[number]=new JLabel(price1);
+				add_icon[number].setIcon(icon[number]);
+				add_jp[number].setLayout(new GridLayout(0,3));
+				add_jp[number].add(add_icon[number]);
+				add_jp[number].add(add_name[number]);
+				add_jp[number].add(add_price[number]);
+				icon[number].setImage(icon[number].getImage().getScaledInstance(200,200,Image.SCALE_DEFAULT));
+				add_icon[number].setSize(200, 200);
+				add_icon[number].setIcon(icon[number]);            
+				add_icon[number].setHorizontalAlignment(SwingConstants.CENTER);
+				jp.add(add_jp[number]);
+				number++;
+			}
+		}catch(SQLException e1){
+			e1.printStackTrace();
+		}
+    }
+    
 	private void initLister(int i) {
 		food_jb[i].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -117,16 +161,21 @@ public class restruant_manage{
         		}
 			}
 		});
+		shop_jb[i].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new ShopCar();
+        		}
+		});
 	}
-	private void foodlistener(int i){
+	private void foodlistener(final int i){
 		image_jb[i].addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				label[i]=new JLabel();
 		        food_jf[i].add(label[i]);
 				int result = chooser[i].showOpenDialog(null);
                 if(result == JFileChooser.APPROVE_OPTION){
-                    String name = chooser[i].getSelectedFile().getPath();
-                    icon[i]=new ImageIcon(name); 
+                    iconurl[i] = chooser[i].getSelectedFile().getPath();
+                    icon[i]=new ImageIcon(iconurl[i]); 
                     icon[i].setImage(icon[i].getImage().getScaledInstance(200,200,Image.SCALE_DEFAULT));     
                     label[i].setSize(200, 200);
                     label[i].setIcon(icon[i]);            
@@ -141,14 +190,21 @@ public class restruant_manage{
 				add_icon[i]=new JLabel();
 				add_name[i]=new JLabel(name_jt[i].getText());
 				add_price[i]=new JLabel(price_jt[i].getText());
+				String name1=name_jt[i].getText(),price1=price_jt[i].getText();
+				Database.strTemp="INSERT INTO "+name+"(FoodName,FoodPrice,FoodIcon)VALUES ('"+name1+"','"+price1+"','"+iconurl[i]+"')";
+				try{
+					Database.stmt.executeUpdate(Database.strTemp);
+				}catch(SQLException e1){
+					e1.printStackTrace();
+				}
 				add_icon[i].setIcon(icon[i]);
 				add_jp[i].setLayout(new GridLayout(0,3));
 				add_jp[i].add(add_icon[i]);
 				add_jp[i].add(add_name[i]);
 				add_jp[i].add(add_price[i]);
 				food_jf[i].dispose();
-				jf.remove(food_jp[i]);
-				jf.add(add_jp[i]);
+				jp.remove(food_jp[i]);
+				jp.add(add_jp[i]);
 				start();
 			}
 		});	
@@ -166,8 +222,14 @@ public class restruant_manage{
 		initLister(number);
 	}
 	
-	public restruant_manage(){
+	public restaurant_manage(){
+		jf.setVisible(true);
+		jf.setResizable(false);
+		jf.setDefaultCloseOperation(3);
+		jf.setBounds(500,100,800,800);
+		jf.add(js);
 		info();
+		data();
 		start();
 	}
 }

@@ -1,17 +1,17 @@
-package GUI;
 import java.awt.*;
+import java.sql.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-public class new_restruant extends JFrame {
+public class new_restaurant extends JFrame {
 	private static final long serialVersionUID = 4270398606681240886L;
 	private JPanel jp1,jp2,jp3,jp4,jp5;
 	private JLabel jl1,jl2,jl3,jl4;
 	private JButton jb1,jb2;
 	private JTextField jt1,jt2,jt3,jt4;
-	public static String name,location,boss,tel;
+	private String name,location,boss,tel;
 	
-	public new_restruant(){
+	public new_restaurant(){
 		jp1=new JPanel();
 		jp2=new JPanel();
 		jp3=new JPanel();
@@ -75,7 +75,23 @@ public class new_restruant extends JFrame {
 					tel=jt4.getText();
 					JOptionPane.showConfirmDialog(null,"添加成功","提示",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE);
 					dispose();
-					new restruant_manage();
+					try{				
+						Database.strTemp="UPDATE restaurantuser SET Flag=1 WHERE Username='"+login.Username+"'";				
+						Database.rs=Database.stmt.executeQuery(Database.strTemp);
+					}catch(SQLException e1){}
+					try{
+						Database.strTemp="INSERT INTO restaurantinfo (Username,RestaurantName,RestaurantAddress,RestaurantBoss,RestaurantTel)VALUES ('"+login.Username+"','"+name+"','"+location+"','"+boss+"','"+tel+"')";
+						Database.stmt.executeUpdate(Database.strTemp);
+						}catch(SQLException e1){
+							e1.printStackTrace();
+						}
+					try{
+						Database.strTemp="CREATE TABLE "+name+"(FoodName TEXT(20) PRIMARY KEY,FoodPrice TEXT(20),FoodIcon TEXT(50))";
+						Database.stmt.executeUpdate(Database.strTemp);
+					}catch(SQLException e1){
+						e1.printStackTrace();
+					}
+					new restaurant_manage();
 				}
 				else
 					JOptionPane.showConfirmDialog(null,"联系电话只能为数字", "提示",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);

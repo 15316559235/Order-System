@@ -1,5 +1,6 @@
-package GUI;
 import java.awt.*;
+import java.sql.*;
+
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -10,6 +11,8 @@ public class login extends JFrame {
 	private JTextField jt;
 	private JPasswordField jps;
 	private JPanel jp1,jp2,jp3;
+	public static int flag = 0;
+	public static String Username,Password;
 	public login() {
 		initPart();
 		initLister();
@@ -56,15 +59,40 @@ public class login extends JFrame {
 
 	private void initLister() {
 		jb1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String password="123";
-				if(jt.getText().endsWith("123")&&String.valueOf(jps.getPassword()).equals(password)){
+			public void actionPerformed(ActionEvent e){
+				try{
+					Database.con=DriverManager.getConnection("jdbc:odbc:restaurantuser");
+					Database.stmt=Database.con.createStatement();
+				}catch(SQLException ee){}	
+				String s1=jt.getText();
+				String s2=String.valueOf(jps.getPassword());
+				Database.strTemp="SELECT * FROM restaurantuser WHERE Username= '"+s1+"' and Password= '"+s2+"'";
+				try{
+					Database.rs=Database.stmt.executeQuery(Database.strTemp);
+				}catch(SQLException e1){
+					e1.printStackTrace();
+				}
+				try{
+				if(Database.rs.next()!=false){
 					JOptionPane.showConfirmDialog(null,"登陆成功","提示",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE);
 					dispose();
-					new add_restruant();
+					Database.strTemp="SELECT * FROM restaurantuser WHERE Username= '"+s1+"'";
+					Database.rs=Database.stmt.executeQuery(Database.strTemp);
+					while(Database.rs.next()){
+						Username=Database.rs.getString("Username");
+						Password=Database.rs.getString("Password");
+						flag=Database.rs.getInt("Flag");
+					}
+					if(flag==0)
+						new add_restaurant();
+					else
+						new restaurant_manage();
 				}
 				else
-					JOptionPane.showConfirmDialog(null,"密码错误", "提示",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showConfirmDialog(null,"用户名或密码错误", "提示",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
+				}catch(SQLException e1){
+					e1.printStackTrace();
+				}
 			}
 		});
 		jb2.addActionListener(new ActionListener() {

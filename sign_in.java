@@ -1,5 +1,5 @@
-package GUI;
 import java.awt.*;
+import java.sql.*;
 import javax.swing.*;
 import java.awt.event.*;
 
@@ -63,8 +63,23 @@ public class sign_in extends JFrame {
 	private void initLister() {
 		jb1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(String.valueOf(jps1.getPassword()).equals(String.valueOf(jps2.getPassword())))
+				if(String.valueOf(jps1.getPassword()).equals(String.valueOf(jps2.getPassword()))){
+					try{
+						Database.con=DriverManager.getConnection("jdbc:odbc:restaurantuser");
+						Database.stmt=Database.con.createStatement();
+					}catch(SQLException ee){}
+					String s1=jt.getText();
+					String s2=String.valueOf(jps2.getPassword());
+					Database.strTemp="INSERT INTO restaurantuser(Username,Password)VALUES ('"+s1+"','"+s2+"')";
+					try{
+						Database.stmt.executeUpdate(Database.strTemp);
+					}catch(SQLException e1){
+						e1.printStackTrace();
+					}
 					JOptionPane.showConfirmDialog(null,"注册成功","提示",JOptionPane.CLOSED_OPTION,JOptionPane.INFORMATION_MESSAGE);
+					dispose();
+					new login();
+				}
 				else
 					JOptionPane.showConfirmDialog(null,"两次输入密码不相同", "提示",JOptionPane.CLOSED_OPTION,JOptionPane.ERROR_MESSAGE);
 			}

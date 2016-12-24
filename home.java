@@ -1,4 +1,3 @@
-package GUI;
 import java.awt.*;
 
 import javax.swing.*;
@@ -40,6 +39,7 @@ public class home{
 		});
 	}
     public static void main(String[] args){
+    	Database.getdatabase();
     	panel();
     	initLister();
     }
@@ -56,4 +56,3 @@ class imagine extends JPanel{
 		g.drawImage(img, 100, 0, 400, 200, null);
 	}
 }
-
