@@ -69,25 +69,10 @@ public class confirm extends JFrame {
 		info.setFont(new Font("",Font.CENTER_BASELINE,22));
 		info.setForeground(Color.white); 
 		info.setBackground(Color.orange);
-		info.setEditable(false);
+		info.setEditable(false);	
 		//
-		FileReader r;
-		final String[] text={"name","tele","addr","notice","d1","num1","2","2","3","3","4","4","5","5",""};
-		
-		r = new FileReader(".\\CustomerInfo.txt");
-		BufferedReader reader1 = new BufferedReader(r);
-		int i;
-		for(i=0;(text[i]=reader1.readLine()) != null;i++){
-		}
-		r.close();	
-		
-		r = new FileReader(".\\Order.txt");
-		BufferedReader reader2 = new BufferedReader(r);
-		//for(i=4;(text[i]=reader2.readLine()) != null;i++){
-		//}
-		r.close();	
-
-		info.setText("姓名："+text[0]+"\r\n"+"电话："+text[1]+"\r\n"+"住址："+text[2]+"\r\n"+"订单为："+"\r\n"+"d1"+"\r\n"+"asdf");
+		info.setText("姓名："+information.name+"\r\n"+"电话："+information.phone+"\r\n"+"住址："+information.address
+				+"\r\n"+"订单总价："+dishes.totalPrice);
 		//
 		frm5.getContentPane().add(info);
 	
@@ -95,6 +80,7 @@ public class confirm extends JFrame {
 		//按键
 		class choose implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
+				new TCP_Client_Send();
 				new success();
 				frm5.dispose();
 			}
@@ -106,7 +92,7 @@ public class confirm extends JFrame {
 		button2.setHorizontalAlignment(JButton.CENTER);
 		frm5.getContentPane().add(button2);
 		button2.addActionListener(new choose());
-	
+
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
     	int scrWidth = (int)screensize.getWidth();
     	int scrHeight = (int)screensize.getHeight();

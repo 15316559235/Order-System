@@ -39,6 +39,7 @@ public class home{
 		});
 	}
     public static void main(String[] args){
+		new TCP();
     	Database.getdatabase();
     	panel();
     	initLister();

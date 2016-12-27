@@ -22,9 +22,11 @@ public class restaurant_manage{
     private JPanel add_jp[]=new JPanel[100];
     private JPanel jp=new JPanel();
     private JScrollPane js=new JScrollPane(jp);
-    private String name,location,boss,tel;
+    public static String name,location,boss,tel;
     private String iconurl[]=new String[100];
-	int number=0;
+	public static int number=0;
+	public static String[] name2=new String[100];
+	public static String[] price2=new String[100];
     
     public void info(){
     	try{
@@ -127,6 +129,8 @@ public class restaurant_manage{
 				name1=Database.rs.getString("FoodName");
 				price1=Database.rs.getString("FoodPrice");
 				iconurl1=Database.rs.getString("FoodIcon");
+				name2[number]=name1;
+				price2[number]=price1;
 				icon[number]=new ImageIcon(iconurl1); 
 				add_jp[number]=new JPanel();
 				add_icon[number]=new JLabel();
@@ -231,5 +235,6 @@ public class restaurant_manage{
 		info();
 		data();
 		start();
+		new info_client();
 	}
 }

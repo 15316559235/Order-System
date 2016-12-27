@@ -20,13 +20,14 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-
-//*********//
 import java.io.*;
-//*********//
+
 
 public class information extends JFrame {
 	JFrame frm4=new JFrame();
+	public static String address;
+	public static String name;
+	public static String phone;
 	public information(){
 		frm4.setTitle("填写信息");
 		frm4.setLayout(null);
@@ -42,11 +43,12 @@ public class information extends JFrame {
 		imagePanel.setOpaque(false);  
 		frm4.getLayeredPane().add(labelp, new Integer(Integer.MIN_VALUE)); 
 	
-    
 		//back键
 		class enter implements ActionListener {
 			public void actionPerformed(ActionEvent e) {
-				new dishes();
+				try{
+		    		new dishes();
+		    	}catch(IOException err){}
 				frm4.dispose();
 			}
 		} 
@@ -56,7 +58,6 @@ public class information extends JFrame {
 		button1.setBounds(0, 0, 70, 70); 
 		frm4.getContentPane().add(button1);
 		button1.addActionListener(new enter());
-    
     
 		JLabel label1 = new JLabel("填写信息");
 		label1.setBounds(70,0,330,70);
@@ -68,56 +69,34 @@ public class information extends JFrame {
 		label1.setHorizontalTextPosition(JLabel.CENTER);  
 		frm4.getContentPane().add(label1);
 	
-		//*********final
 		final JTextField text1=new JTextField();
 		text1.setText("请输入姓名");
 		text1.setHorizontalAlignment(JTextField.LEFT);
 		text1.setBounds(120,120,160,50);
 		frm4.getContentPane().add(text1);
-		//*********
 		final JTextField text2=new JTextField();
 		text2.setText("请输入联系方式");
 		text2.setHorizontalAlignment(JTextField.LEFT);
 		text2.setBounds(120,190,160,50);
 		frm4.getContentPane().add(text2);
-		
-		//*********
 		final JTextField text3=new JTextField();
 		text3.setText("请输入地址");
 		text3.setHorizontalAlignment(JTextField.LEFT);
 		text3.setBounds(120,260,160,50);
 		frm4.getContentPane().add(text3);
-		//*********
 		final JTextField text4=new JTextField();
 		text4.setText("备注");
 		text4.setHorizontalAlignment(JTextField.LEFT);
-		//*********(,330,,)
 		text4.setBounds(120,330,160,50);
 		frm4.getContentPane().add(text4);
-	
 
 		//按键
 		class choose implements ActionListener {
 		    public void actionPerformed(ActionEvent e) {
-		    	//*********//
-		    	String info1="", info2="", info3="", info4="";
-		    	info1 = text1.getText();
-		    	info2 = text2.getText();
-		    	info3 = text3.getText();
-		    	info4 = text4.getText();
-		    	FileWriter recordInfo;
-		    	try{
-		    		//将用户信息储存到根目录下CustomerInfo。txt中，格式为一行一条信息，共四条
-		    		recordInfo = new FileWriter(".\\CustomerInfo.txt",false);
-		    		recordInfo.write(info1+"\r\n"+info2+"\r\n"+info3+"\r\n"+info4);
-		    		recordInfo.close();
-		    	}catch(IOException err){
-		    	}finally{
-		    	}
-		    	//*********//
-		    	try{
-		    		new confirm();
-		    	}catch(IOException err){}
+		    	address=text3.getText();
+		    	name=text1.getText();
+		    	phone=text2.getText();
+		    	try{new confirm();}catch(Exception err){}
 		    	frm4.dispose();
 			}
 		}

@@ -25,14 +25,15 @@ import java.io.*;
 
 public class dishes extends JFrame {
 	private static final String String = null;
+	public static String[] dishNum=new String[100];
+	public static float totalPrice;
 	JFrame frm3=new JFrame();
-	public dishes(){
+	public dishes() throws IOException{
 		frm3.setTitle("选择菜品");
 		frm3.setLayout(null);
 		frm3.setUndecorated(false);//去掉窗体修饰,包括最大化按钮 
 		frm3.setResizable(false); //禁止改变窗体大
-	
-	
+		totalPrice=0;
 		//背景
 		String path = "background.jpg";  
 		ImageIcon background = new ImageIcon(path); 
@@ -42,15 +43,14 @@ public class dishes extends JFrame {
 		imagePanel.setOpaque(false);  
 		frm3.getLayeredPane().add(labelp, new Integer(Integer.MIN_VALUE)); 
 	
-	
 		//back键
 		class enter implements ActionListener{
-				public void actionPerformed(ActionEvent e)  {
-					try{
-						new restaurant();
-					}catch(IOException err){}
-					frm3.dispose();
-				}
+			public void actionPerformed(ActionEvent e)  {
+				try{
+					new restaurant();
+				}catch(IOException err){}
+				frm3.dispose();
+			}
 		} 
 		String path1= "back.jpg";  
 		ImageIcon back = new ImageIcon(path1); 
@@ -58,7 +58,6 @@ public class dishes extends JFrame {
 		button1.setBounds(0, 0, 70, 70); 
 		frm3.getContentPane().add(button1);
 		button1.addActionListener(new enter());
-    
     
 		JLabel label1 = new JLabel("选择菜品");
 		label1.setBounds(70,0,330,70);
@@ -69,7 +68,6 @@ public class dishes extends JFrame {
 		label1.setHorizontalAlignment(JLabel.CENTER);
 		label1.setHorizontalTextPosition(JLabel.CENTER);  
 		frm3.getContentPane().add(label1);
-
 
 		JLabel label = new JLabel();
 		label.setBounds(0,70,400,50);
@@ -115,8 +113,30 @@ public class dishes extends JFrame {
 		labelc5.setText(text5);
 		labelc5.setHorizontalAlignment(JLabel.LEFT);
 		frm3.getContentPane().add(labelc5);
-	
 		
+		//
+		int i;
+		for(i=0;i<5;i++){
+			switch(i){
+			case 0:
+				labelc1.setText(TCP_Client_Receive.dishName[i]+"                                                   "+TCP_Client_Receive.price[i]);
+				break;
+			case 1:
+				labelc2.setText(TCP_Client_Receive.dishName[i]+"                                                   "+TCP_Client_Receive.price[i]);
+				break;
+			case 2:
+				labelc3.setText(TCP_Client_Receive.dishName[i]+"                                                   "+TCP_Client_Receive.price[i]);
+				break;
+			case 3:
+				labelc4.setText(TCP_Client_Receive.dishName[i]+"                                                   "+TCP_Client_Receive.price[i]);
+				break;
+			case 4:
+				labelc5.setText(TCP_Client_Receive.dishName[i]+"                                                   "+TCP_Client_Receive.price[i]);
+				break;
+			default:break;
+			}
+		}
+		//
 		
 		//+/-按键
 		final JTextField textc1=new JTextField();
@@ -153,8 +173,6 @@ public class dishes extends JFrame {
 		buttonc1m.setBounds(290, 150, 30, 30);  
 		frm3.getContentPane().add(buttonc1m);
 		buttonc1m.addActionListener(new minusc1());
-		
-		
 		
 		final JTextField textc2=new JTextField();
 		textc2.setHorizontalAlignment(JTextField.LEFT);
@@ -228,8 +246,6 @@ public class dishes extends JFrame {
 		frm3.getContentPane().add(buttonc3m);
 		buttonc3m.addActionListener(new minusc3());
 		
-		
-		
 		final JTextField textc4=new JTextField();
 		textc4.setHorizontalAlignment(JTextField.LEFT);
 		textc4.setBounds(320,522,30,30);
@@ -265,7 +281,6 @@ public class dishes extends JFrame {
 		frm3.getContentPane().add(buttonc4m);
 		buttonc4m.addActionListener(new minusc4());
 		
-		
 		final JTextField textc5=new JTextField();
 		textc5.setHorizontalAlignment(JTextField.LEFT);
 		textc5.setBounds(320,646,30,30);
@@ -285,7 +300,6 @@ public class dishes extends JFrame {
 		frm3.getContentPane().add(buttonc5p);
 		buttonc5p.addActionListener(new plusc5());
 		
-		
 		class minusc5 implements ActionListener{
 			public void actionPerformed(ActionEvent e)  {
 				textc5.setText(String.valueOf(Integer.parseInt(textc5.getText())-Integer.parseInt("1")));
@@ -301,26 +315,44 @@ public class dishes extends JFrame {
 		frm3.getContentPane().add(buttonc5m);
 		buttonc5m.addActionListener(new minusc5());
 		
-		
-		
-		
-
 		//按键
-		class choose implements ActionListener {
+		class choose implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
+				for(int i=0;i<5;i++){
+					switch(i){
+					case 0:
+						dishNum[0]=textc1.getText();
+						totalPrice=totalPrice+Integer.parseInt(dishNum[0])*Integer.parseInt(TCP_Client_Receive.price[0]);
+						break;
+					case 1:
+						dishNum[1]=textc2.getText();
+						totalPrice=totalPrice+Integer.parseInt(dishNum[1])*Integer.parseInt(TCP_Client_Receive.price[1]);
+						break;
+					case 2:
+						dishNum[2]=textc3.getText();
+						//totalPrice=totalPrice+Integer.parseInt(dishNum[2])*Integer.parseInt(TCP_Client_Receive.price[2]);
+						break;
+					case 3:
+						dishNum[3]=textc4.getText();
+						//totalPrice=totalPrice+Integer.parseInt(dishNum[3])*Integer.parseInt(TCP_Client_Receive.price[3]);
+						break;
+					case 4:
+						dishNum[4]=textc5.getText();
+						//totalPrice=totalPrice+Integer.parseInt(dishNum[4])*Integer.parseInt(TCP_Client_Receive.price[4]);
+						break;
+					}	
+					
+				}
 				new information();
 				frm3.dispose();
 			}
 		}
-		    
 		final JButton button2=new JButton();
 		button2.setText("填写信息");
-		button2.setBounds(280,800,120,60);//方便我看，你自己改一下!!!!
+		button2.setBounds(280,600,120,60);
 		button2.setHorizontalAlignment(JButton.CENTER);
 		frm3.getContentPane().add(button2);
 		button2.addActionListener(new choose());
-	
-		
 			
 		Dimension screensize = Toolkit.getDefaultToolkit().getScreenSize();
     	int scrWidth = (int)screensize.getWidth();
@@ -331,6 +363,8 @@ public class dishes extends JFrame {
 	}
     
 	public static void main(String[] args){
-    	new dishes();
+    	try{
+    		new dishes();
+    	}catch(IOException err){}
     }
 }

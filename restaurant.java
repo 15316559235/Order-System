@@ -66,7 +66,9 @@ public class restaurant extends JFrame {
 		//按键
 		class choose implements ActionListener {
 		    public void actionPerformed(ActionEvent e) {
-		    	new dishes();
+		    	try{
+		    		new dishes();
+		    	}catch(IOException err){}
 		    	frm2.dispose();
 			}
 		}
@@ -84,17 +86,9 @@ public class restaurant extends JFrame {
 			public void valueChanged(ListSelectionEvent arg0) {
 				button2.setEnabled(true);
 			}
-		}
-		
-		FileReader getResName;
-		getResName = new FileReader(".\\ResName.txt");
-		BufferedReader reader = new BufferedReader(getResName);
-		final String[] restaurants={"店家1","店家2","店家3","店家4","店家5",""};
-		int i;
-		for(i=0;(restaurants[i]=reader.readLine()) != null;i++){
-		}
-		getResName.close();		
-		
+		}	
+		new TCP_Client_Receive();
+		final String[] restaurants={TCP_Client_Receive.shopName,"店家2","店家3","店家4","店家5",""};
 		JList list=new JList(restaurants);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectionBackground(Color.gray);
